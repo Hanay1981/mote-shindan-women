@@ -3,1025 +3,495 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>モテ度 本格診断【女性版】｜行動科学×AI分析</title>
+<title>モテ度 本格診断【女性版】| ジブンwoカシカ</title>
+<meta name="description" content="Big Five・ECR-R・DERSなど心理学的尺度をもとに、あなたの恋愛市場における行動と結果のズレを分析。直近3ヶ月の行動で測る本格診断。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,600;1,300;1,400&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
-
-  :root {
-    --bg:    #06060a;
-    --bg2:   #0f0f16;
-    --bg3:   #16161f;
-    --border: rgba(255,255,255,0.07);
-    --rose:  #F2688A;
-    --rose2: #E84D72;
-    --lavender: #C9A7F5;
-    --gold:  #F5C842;
-    --text:  rgba(255,255,255,0.85);
-    --text-dim: rgba(255,255,255,0.38);
-    --text-faint: rgba(255,255,255,0.16);
-  }
-
-  * { box-sizing: border-box; margin:0; padding:0; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Noto Sans JP', sans-serif;
-    min-height: 100vh;
-    overflow-x: hidden;
-  }
-
-  /* グレインテクスチャ */
-  body::before {
-    content:'';
-    position:fixed; inset:0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
-    pointer-events:none; z-index:0;
-  }
-
-  /* 背景グラデーション装飾 */
-  body::after {
-    content:'';
-    position:fixed; top:-200px; right:-200px;
-    width:600px; height:600px;
-    background: radial-gradient(circle, rgba(242,104,138,0.06) 0%, transparent 65%);
-    pointer-events:none; z-index:0;
-  }
-
-  .wrap { max-width:540px; margin:0 auto; padding:0 20px 80px; position:relative; z-index:1; }
-
-  @keyframes fadeUp   { from{opacity:0;transform:translateY(22px)} to{opacity:1;transform:translateY(0)} }
-  @keyframes spin     { to{transform:rotate(360deg)} }
-  @keyframes pulse    { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  @keyframes bloom    { 0%{transform:scale(0.92);opacity:0} 100%{transform:scale(1);opacity:1} }
-  @keyframes shimmer  { 0%{background-position:-200% center} 100%{background-position:200% center} }
-
-  .anim-fadeup  { animation: fadeUp 0.5s cubic-bezier(.22,.68,0,1.15) forwards; }
-  .anim-bloom   { animation: bloom 0.45s cubic-bezier(.22,.68,0,1.15) forwards; }
-
-  .section { display:none; }
-  .section.active { display:block; }
-
-  /* ════ INTRO ════ */
-  #intro { padding-top:56px; text-align:center; }
-
-  .hero-icon { font-size:50px; margin-bottom:14px; display:block; }
-
-  .hero-title {
-    font-family:'Cormorant Garamond', serif;
-    font-size:32px; font-weight:600;
-    color:#fff; letter-spacing:0.04em;
-    line-height:1.2; margin-bottom:6px;
-  }
-
-  .hero-title em {
-    font-style:italic; font-weight:300;
-    background: linear-gradient(120deg, var(--rose), var(--lavender));
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent;
-  }
-
-  .hero-sub {
-    font-size:10.5px; color:var(--text-faint);
-    letter-spacing:0.2em; margin-bottom:30px;
-  }
-
-  .intro-card {
-    background:var(--bg2);
-    border:1px solid var(--border);
-    border-radius:18px;
-    padding:22px 24px;
-    text-align:left; margin-bottom:18px;
-  }
-
-  .intro-card p {
-    font-size:13.5px; line-height:1.95;
-    color:rgba(255,255,255,0.58); font-weight:300;
-  }
-
-  .intro-card p em {
-    color:var(--rose); font-style:normal; font-weight:500;
-  }
-
-  .badge-row {
-    display:flex; gap:8px; margin-bottom:26px;
-  }
-
-  .badge-item {
-    background:var(--bg3);
-    border:1px solid var(--border);
-    border-radius:10px;
-    padding:10px 8px;
-    text-align:center; flex:1;
-  }
-  .badge-item .bi { font-size:18px; margin-bottom:4px; }
-  .badge-item .bl { font-size:10.5px; color:var(--text-dim); font-weight:300; }
-
-  .scale-legend {
-    background:var(--bg3);
-    border:1px solid var(--border);
-    border-radius:14px;
-    padding:16px 20px; margin-bottom:24px;
-  }
-
-  .sl-title { font-size:11px; color:var(--text-dim); letter-spacing:0.1em; margin-bottom:12px; }
-
-  .scale-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
-
-  .scale-item { display:flex; align-items:center; gap:8px; font-size:12px; color:rgba(255,255,255,0.5); }
-
-  .scale-num {
-    width:22px; height:22px; border-radius:6px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:11px; font-weight:700; flex-shrink:0;
-  }
-
-  /* ── ボタン ── */
-  .btn-primary {
-    width:100%;
-    background: linear-gradient(135deg, var(--rose), var(--lavender));
-    border:none; border-radius:14px;
-    color:#fff; font-weight:700;
-    font-size:15px; padding:16px;
-    cursor:pointer; transition:all 0.22s;
-    font-family:'Noto Sans JP', sans-serif;
-    letter-spacing:0.06em;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  }
-  .btn-primary:hover { transform:translateY(-2px); box-shadow:0 10px 32px rgba(242,104,138,0.4); }
-  .btn-primary:disabled { opacity:0.22; cursor:not-allowed; transform:none; box-shadow:none; }
-
-  .btn-ghost {
-    width:100%; background:transparent;
-    border:1px solid var(--border); border-radius:12px;
-    color:var(--text-dim); font-size:13px; padding:13px;
-    cursor:pointer; transition:all 0.2s;
-    font-family:'Noto Sans JP', sans-serif; margin-top:10px;
-  }
-  .btn-ghost:hover { border-color:rgba(255,255,255,0.28); color:var(--text); }
-
-  /* ════ QUIZ ════ */
-  #quiz { padding-top:36px; }
-
-  .progress-wrap { margin-bottom:22px; }
-
-  .progress-top {
-    display:flex; justify-content:space-between;
-    align-items:center; margin-bottom:8px;
-  }
-
-  .cat-badge {
-    font-size:11px; font-weight:600;
-    padding:3px 12px; border-radius:20px;
-    letter-spacing:0.07em;
-    background:rgba(242,104,138,0.12);
-    color:var(--rose);
-    border:1px solid rgba(242,104,138,0.22);
-  }
-
-  .q-count { font-size:12px; color:var(--text-faint); }
-
-  .progress-bar { height:3px; background:rgba(255,255,255,0.06); border-radius:2px; overflow:hidden; }
-
-  .progress-fill {
-    height:100%;
-    background: linear-gradient(90deg, var(--rose2), var(--lavender));
-    border-radius:2px;
-    transition:width 0.4s cubic-bezier(.4,0,.2,1);
-  }
-
-  .basis-label { font-size:10px; color:var(--text-faint); text-align:right; margin-top:5px; letter-spacing:0.07em; }
-
-  .q-card {
-    background:var(--bg2);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:20px 22px; margin-bottom:16px;
-  }
-
-  .q-text { font-size:16px; font-weight:500; line-height:1.7; color:#fff; }
-
-  .opts { margin-bottom:4px; }
-
-  .opt-btn {
-    width:100%;
-    background:rgba(255,255,255,0.03);
-    border:1px solid var(--border);
-    border-radius:10px;
-    color:rgba(255,255,255,0.62);
-    padding:12px 16px; text-align:left;
-    cursor:pointer; font-size:13px;
-    transition:all 0.18s; margin-bottom:7px;
-    line-height:1.5;
-    font-family:'Noto Sans JP', sans-serif;
-    display:flex; align-items:center; gap:10px;
-  }
-
-  .opt-btn:hover {
-    background:rgba(255,255,255,0.07);
-    border-color:rgba(255,255,255,0.18);
-    transform:translateX(3px);
-  }
-
-  .opt-btn.selected {
-    background:rgba(242,104,138,0.1);
-    border-color:var(--rose);
-    color:#FFB8C8;
-  }
-
-  .opt-num {
-    width:24px; height:24px; border-radius:7px;
-    display:flex; align-items:center; justify-content:center;
-    font-size:12px; font-weight:700; flex-shrink:0;
-    background:rgba(255,255,255,0.06);
-    color:var(--text-dim);
-    transition:all 0.18s;
-  }
-
-  .opt-btn.selected .opt-num {
-    background: linear-gradient(135deg, var(--rose), var(--lavender));
-    color:#fff;
-  }
-
-  /* ════ LOADING ════ */
-  #loading { padding-top:100px; text-align:center; }
-
-  .spinner {
-    width:48px; height:48px;
-    border:2.5px solid rgba(242,104,138,0.1);
-    border-top-color:var(--rose);
-    border-radius:50%;
-    animation:spin 0.85s linear infinite;
-    margin:0 auto 28px;
-  }
-
-  .loading-text { font-size:13px; color:var(--rose); letter-spacing:0.14em; animation:pulse 1.8s ease infinite; margin-bottom:8px; }
-  .loading-sub  { font-size:11px; color:var(--text-faint); letter-spacing:0.08em; }
-
-  .score-preview { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; margin-top:36px; }
-
-  .score-chip { background:var(--bg2); border:1px solid var(--border); border-radius:8px; padding:7px 12px; text-align:center; }
-  .sc-cat { font-size:11px; color:var(--rose); font-weight:700; }
-  .sc-val { font-size:17px; font-weight:700; color:#fff; }
-  .sc-max { font-size:10px; color:var(--text-faint); }
-
-  /* ════ RESULT ════ */
-  #result { padding-top:40px; }
-
-  .rank-card {
-    border-radius:22px; padding:30px 24px;
-    text-align:center; margin-bottom:14px;
-    position:relative; overflow:hidden;
-  }
-
-  .rank-glow {
-    position:absolute; top:-60px; right:-60px;
-    width:220px; height:220px; border-radius:50%;
-    pointer-events:none;
-  }
-
-  .rank-label { font-size:11px; color:rgba(255,255,255,0.3); letter-spacing:0.18em; margin-bottom:8px; }
-
-  .rank-score {
-    font-family:'Cormorant Garamond', serif;
-    font-size:80px; font-weight:600; line-height:1;
-  }
-
-  .rank-denom { font-size:13px; color:rgba(255,255,255,0.28); margin:4px 0 14px; }
-
-  .rank-type-badge {
-    display:inline-block; border-radius:24px;
-    padding:5px 18px; font-size:14px; font-weight:600;
-    letter-spacing:0.06em; margin-bottom:4px;
-  }
-
-  .rank-sub { font-size:12px; color:rgba(255,255,255,0.32); margin-top:6px; letter-spacing:0.06em; }
-
-  .cat-bars { margin-top:22px; text-align:left; }
-  .cat-bar-row { margin-bottom:10px; }
-  .cat-bar-top { display:flex; justify-content:space-between; margin-bottom:4px; }
-  .cat-bar-name { font-size:11px; color:rgba(255,255,255,0.42); }
-  .cat-bar-val  { font-size:11px; font-weight:700; }
-  .cat-bar-bg   { height:5px; background:rgba(255,255,255,0.06); border-radius:3px; overflow:hidden; }
-  .cat-bar-fill { height:100%; border-radius:3px; transition:width 1s cubic-bezier(.4,0,.2,1); }
-
-  .ai-report {
-    background:var(--bg2);
-    border:1px solid var(--border);
-    border-radius:16px;
-    padding:20px 22px; margin-bottom:12px;
-  }
-
-  .ai-report-title {
-    font-size:11px; font-weight:600;
-    color:var(--rose); letter-spacing:0.14em;
-    margin-bottom:16px;
-  }
-
-  .ai-content {
-    font-size:13.5px; line-height:1.92;
-    color:rgba(255,255,255,0.72); font-weight:300;
-  }
-
-  .ai-content h2 {
-    font-size:15px; font-weight:700;
-    margin:20px 0 8px;
-    padding-bottom:6px;
-    border-bottom:1px solid rgba(242,104,138,0.18);
-    font-family:'Noto Sans JP', sans-serif;
-  }
-
-  .ai-content h3 {
-    font-size:14px; font-weight:600;
-    margin:14px 0 6px;
-    font-family:'Noto Sans JP', sans-serif;
-  }
-
-  .ai-content p { margin:8px 0; }
-  .ai-content ul { padding-left:0; list-style:none; }
-  .ai-content ul li { padding:4px 0 4px 16px; position:relative; color:rgba(255,255,255,0.72); }
-  .ai-content ul li::before { content:'›'; position:absolute; left:0; font-weight:700; }
-
-  .scales-wrap {
-    background:rgba(255,255,255,0.02);
-    border:1px solid rgba(255,255,255,0.05);
-    border-radius:12px; padding:14px 18px; margin-bottom:14px;
-  }
-
-  .scales-title { font-size:10px; color:var(--text-faint); letter-spacing:0.14em; margin-bottom:10px; }
-
-  .scales-list { display:flex; flex-wrap:wrap; gap:6px; }
-
-  .scale-tag {
-    font-size:10px; padding:3px 10px; border-radius:20px;
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(255,255,255,0.07);
-    color:rgba(255,255,255,0.28);
-  }
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#06060a;--surface:#0f0f18;--surface2:#161620;
+  --border:rgba(255,255,255,0.07);--border2:rgba(255,255,255,0.13);
+  --text:#dde0e8;--muted:#6a6e82;--faint:#2a2a3a;
+  --rose:#F2688A;--rose2:#C84060;--lav:#C9A7F5;--lav2:#9070C0;
+}
+html,body{min-height:100vh;background:var(--bg);color:var(--text);font-family:'Noto Sans JP',sans-serif}
+body::before{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0}
+body::after{content:'';position:fixed;top:-200px;right:-200px;width:500px;height:500px;background:radial-gradient(circle,rgba(242,104,138,0.05),transparent 65%);pointer-events:none;z-index:0}
+.app{max-width:600px;margin:0 auto;padding:0 1.2rem 5rem;position:relative;z-index:1}
+
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.fade-in{animation:fadeUp .45s cubic-bezier(.22,.68,0,1.15) forwards}
+
+.top{padding:3.5rem 0 2rem;text-align:center}
+.top-eyebrow{font-size:.68rem;letter-spacing:.22em;color:var(--muted);margin-bottom:1rem}
+.top h1{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:600;line-height:1.3;margin-bottom:.4rem;color:#fff}
+.top-italic{font-style:italic;font-weight:300;font-size:1.4rem;color:rgba(255,255,255,.45);display:block;background:linear-gradient(120deg,var(--rose),var(--lav));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.top .sub{font-size:.7rem;color:var(--muted);letter-spacing:.16em;margin-bottom:2rem}
+.intro-body{font-size:.88rem;line-height:2;color:#9098a8;text-align:left;margin-bottom:1.5rem}
+.intro-body p{margin-bottom:1rem}
+.intro-body em{color:var(--rose);font-style:normal;font-weight:500}
+.hook-line{border-left:2px solid var(--rose2);padding-left:1.2rem;margin:1.2rem 0;font-size:.88rem;line-height:1.9;color:#b8c0cc}
+.scale-box{background:var(--surface);border:.5px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:1.5rem}
+.scale-box h4{font-size:.7rem;color:var(--muted);letter-spacing:.12em;margin-bottom:.8rem}
+.scale-tags{display:flex;flex-wrap:wrap;gap:.5rem}
+.scale-tag{font-size:.7rem;padding:3px 10px;border-radius:20px;background:rgba(242,104,138,.1);border:.5px solid rgba(242,104,138,.25);color:#d06880}
+.warn-box{background:rgba(242,104,138,.05);border:.5px solid rgba(242,104,138,.2);border-radius:10px;padding:.9rem 1.1rem;margin-bottom:1.5rem;font-size:.8rem;color:#a05868;line-height:1.8}
+.scale-legend{background:var(--surface2);border:.5px solid var(--border);border-radius:12px;padding:1.2rem;margin-bottom:2rem}
+.scale-legend h4{font-size:.7rem;color:var(--muted);letter-spacing:.1em;margin-bottom:.8rem}
+.legend-section{margin-bottom:.8rem}
+.legend-label{font-size:.7rem;color:var(--muted);margin-bottom:.5rem}
+.legend-grid{display:grid;grid-template-columns:1fr 1fr;gap:.4rem}
+.legend-item{display:flex;align-items:center;gap:.5rem;font-size:.75rem;color:rgba(255,255,255,.5)}
+.legend-num{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0}
+
+.btn-start{width:100%;padding:1rem;font-size:1rem;font-family:'Cormorant Garamond',serif;font-weight:600;letter-spacing:.08em;border-radius:12px;border:none;background:linear-gradient(135deg,var(--rose),var(--lav));color:#fff;cursor:pointer;transition:all .2s;text-shadow:0 1px 3px rgba(0,0,0,.3)}
+.btn-start:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(242,104,138,.4)}
+.btn-next{width:100%;padding:.9rem;font-size:.95rem;font-family:'Noto Sans JP',sans-serif;font-weight:700;border-radius:10px;border:none;background:linear-gradient(135deg,var(--rose),var(--lav));color:#fff;cursor:pointer;transition:all .2s;margin-top:.8rem;letter-spacing:.05em;text-shadow:0 1px 3px rgba(0,0,0,.2)}
+.btn-next:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 8px 24px rgba(242,104,138,.35)}
+.btn-next:disabled{opacity:.22;cursor:not-allowed}
+.btn-retry{width:100%;margin-top:1.5rem;padding:.85rem;font-size:.9rem;font-family:'Noto Sans JP',sans-serif;border:.5px solid var(--border2);border-radius:10px;background:transparent;color:var(--text);cursor:pointer;transition:all .2s}
+.btn-retry:hover{background:var(--surface)}
+
+.quiz-wrap{padding-top:2rem}
+.progress-wrap{margin-bottom:1.5rem}
+.progress-top{display:flex;justify-content:space-between;margin-bottom:.5rem}
+.cat-pill{font-size:.68rem;font-weight:600;padding:2px 10px;border-radius:20px;background:rgba(242,104,138,.1);color:var(--rose);border:.5px solid rgba(242,104,138,.2);letter-spacing:.06em}
+.q-num{font-size:.72rem;color:var(--muted)}
+.progress-bar{height:2.5px;background:var(--faint);border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--rose2),var(--rose),var(--lav));border-radius:2px;transition:width .4s ease}
+.basis-note{font-size:.65rem;color:var(--muted);text-align:right;margin-top:.4rem;letter-spacing:.06em}
+.q-card{background:var(--surface);border:.5px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem;margin-bottom:1.2rem}
+.q-text{font-size:.97rem;line-height:1.75;color:#fff;font-weight:500}
+.opts{display:flex;flex-direction:column;gap:.5rem;margin-bottom:.4rem}
+.opt-btn{padding:.75rem 1rem;font-size:.86rem;font-family:'Noto Sans JP',sans-serif;border:.5px solid var(--border);border-radius:8px;background:var(--surface);color:var(--muted);cursor:pointer;text-align:left;transition:all .15s;display:flex;align-items:center;gap:.7rem;-webkit-tap-highlight-color:transparent}
+.opt-btn:hover{border-color:var(--rose2);color:var(--text);background:rgba(242,104,138,.05)}
+.opt-btn.selected{border-color:var(--rose);color:#FFB8C8;background:rgba(242,104,138,.08)}
+.opt-num{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0;background:rgba(255,255,255,.06);color:var(--muted);transition:all .15s}
+.opt-btn.selected .opt-num{background:linear-gradient(135deg,var(--rose),var(--lav));color:#fff}
+
+.loading-screen{display:none;text-align:center;padding:5rem 0}
+.spinner{width:40px;height:40px;border:2px solid var(--faint);border-top-color:var(--rose);border-radius:50%;animation:spin .85s linear infinite;margin:0 auto 1.5rem}
+.loading-text{font-size:.85rem;color:var(--rose);letter-spacing:.1em}
+.score-chips{display:flex;flex-wrap:wrap;justify-content:center;gap:.5rem;margin-top:2rem}
+.chip{background:var(--surface);border:.5px solid var(--border);border-radius:8px;padding:.5rem .8rem;text-align:center}
+.chip-cat{font-size:.68rem;color:var(--rose);font-weight:700}
+.chip-val{font-size:1rem;font-weight:700;color:#fff}
+.chip-max{font-size:.65rem;color:var(--muted)}
+
+.result-wrap{padding-top:1.5rem}
+.rank-card{border-radius:20px;padding:2rem 1.5rem;text-align:center;margin-bottom:1.2rem;position:relative;overflow:hidden}
+.rank-glow{position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;pointer-events:none}
+.rank-label{font-size:.68rem;color:rgba(255,255,255,.28);letter-spacing:.18em;margin-bottom:.6rem}
+.rank-score{font-family:'Cormorant Garamond',serif;font-size:5rem;font-weight:600;line-height:1}
+.rank-denom{font-size:.85rem;color:rgba(255,255,255,.28);margin:.3rem 0 .9rem}
+.rank-badge{display:inline-block;border-radius:24px;padding:4px 16px;font-size:.88rem;font-weight:600;letter-spacing:.06em;margin-bottom:.3rem}
+.rank-sub{font-size:.75rem;color:rgba(255,255,255,.3);margin-top:.4rem;letter-spacing:.04em}
+.cat-bars{margin-top:1.5rem;text-align:left}
+.bar-row{margin-bottom:.7rem}
+.bar-top{display:flex;justify-content:space-between;margin-bottom:.3rem}
+.bar-name{font-size:.7rem;color:rgba(255,255,255,.4)}
+.bar-val{font-size:.7rem;font-weight:700}
+.bar-bg{height:4px;background:rgba(255,255,255,.06);border-radius:2px;overflow:hidden}
+.bar-fill{height:100%;border-radius:2px;transition:width 1s cubic-bezier(.4,0,.2,1)}
+
+.result-section{margin-bottom:1.5rem}
+.section-label{font-size:.68rem;letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-bottom:.7rem;padding-bottom:.4rem;border-bottom:.5px solid var(--border);display:flex;align-items:center;gap:.5rem}
+.section-num{font-size:.6rem;color:rgba(255,255,255,.18)}
+.section-text{font-size:.88rem;line-height:2;color:#9098a8}
+.result-list{list-style:none}
+.rl-item{padding:.6rem 0 .6rem 1.1rem;border-bottom:.5px solid var(--border);font-size:.85rem;line-height:1.8;color:#9098a8;position:relative}
+.rl-item::before{content:'';position:absolute;left:0;top:.85rem;width:5px;height:5px;border-radius:50%}
+.rl-warn::before{background:var(--rose)}
+.rl-danger::before{background:#E05060}
+.rl-ok::before{background:#60D0A0}
+.highlight-box{padding:.9rem 1.1rem;background:rgba(242,104,138,.05);border:.5px solid rgba(242,104,138,.2);border-radius:10px;font-size:.88rem;line-height:2;color:var(--text);border-left:2px solid var(--rose)}
+.action-box{background:rgba(255,255,255,.03);border:.5px solid var(--border2);border-radius:10px;padding:.9rem 1rem;margin-bottom:.5rem}
+.action-label{font-size:.65rem;letter-spacing:.08em;color:var(--rose);margin-bottom:.4rem}
+.action-text{font-size:.85rem;line-height:1.8;color:#b0b8c8}
+.first-action{padding:1rem;background:rgba(242,104,138,.06);border:.5px solid var(--rose);border-radius:10px}
+.first-action-label{font-size:.68rem;color:var(--rose);letter-spacing:.1em;margin-bottom:.5rem}
+.first-action-text{font-size:.92rem;line-height:1.8;color:#fff}
+.redefine-box{font-size:.88rem;line-height:2.1;color:#b0b8c4;padding:1rem 1.2rem;background:rgba(255,255,255,.03);border-radius:10px;border-left:2px solid var(--rose);white-space:pre-line}
+.scales-footer{background:rgba(255,255,255,.02);border:.5px solid rgba(255,255,255,.04);border-radius:10px;padding:.9rem 1.1rem;margin-top:1rem}
+.scales-footer-title{font-size:.65rem;color:var(--muted);letter-spacing:.12em;margin-bottom:.6rem}
+.scales-footer-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.sf-tag{font-size:.68rem;padding:2px 8px;border-radius:20px;background:rgba(255,255,255,.04);border:.5px solid var(--border);color:rgba(255,255,255,.25)}
+@media(max-width:480px){.rank-score{font-size:4rem}}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="app">
 
-  <!-- ════ INTRO ════ -->
-  <div id="intro" class="section active anim-fadeup">
-    <span class="hero-icon">🌸</span>
-    <h1 class="hero-title">モテ度 本格診断<br><em>Women's Edition</em></h1>
-    <p class="hero-sub">WOMEN'S ATTRACTION ANALYSIS · BEHAVIORAL SCIENCE × AI</p>
-
-    <div class="intro-card">
-      <p>
-        この診断は、<em>Big Five（NEO-FFI）・IRI（共感尺度）・ECR-R（愛着スタイル不安軸）・
-        Rosenberg自己尊重感尺度・DERS（感情調節困難尺度）・Big Five誠実性</em>など
-        心理学・臨床研究で使用される尺度をもとに設計されています。<br><br>
-        「直近3ヶ月」の行動に絞ることで<em>記憶バイアスを排除</em>し、
-        行動系・内面系で尺度を使い分けることで高い弁別力を実現しています。<br><br>
-        ここで言う「モテ」とは<em>多数からチヤホヤされること</em>ではなく、
-        「気になる人にちゃんと意識してもらい、継続的に選ばれること」です。
-      </p>
+<!-- TOP -->
+<div id="topPage">
+  <div class="top fade-in">
+    <div class="top-eyebrow">Women's Attraction Analysis · Behavioral Science</div>
+    <h1>モテ度 本格診断<br><span class="top-italic">Women's Edition</span></h1>
+    <div class="sub">33 QUESTIONS · PSYCHOLOGICAL SCALES · BEHAVIORAL SCIENCE</div>
+  </div>
+  <div class="intro-body fade-in">
+    <p>モテない理由は「顔」でも「スペック」でもないかもしれません。</p>
+    <div class="hook-line">この診断は<em>Big Five（NEO-FFI）・IRI（共感尺度）・ECR-R（愛着スタイル不安軸）・Rosenberg自己尊重感尺度・DERS（感情調節困難尺度）・Big Five誠実性</em>など心理学・臨床研究で使用される尺度をもとに設計されています。</div>
+    <p>ここで言う「モテ」とは<em>多数からチヤホヤされること</em>ではなく、「気になる人にちゃんと意識してもらい、継続的に選ばれること」です。</p>
+    <p>「直近3ヶ月」の行動に絞り記憶バイアスを排除。<em>逆転項目あり</em>の本格設計で、行動と結果の「ズレ」を可視化します。</p>
+  </div>
+  <div class="warn-box">この診断は行動傾向の可視化を目的としたものです。結果は断定的な評価ではなく、傾向の分析と改善のヒントとしてご活用ください。</div>
+  <div class="scale-box">
+    <h4>使用している心理学的尺度</h4>
+    <div class="scale-tags">
+      <span class="scale-tag">NEO-FFI 外向性・協調性・誠実性・開放性</span>
+      <span class="scale-tag">IRI 共感尺度</span>
+      <span class="scale-tag">ECR-R 愛着不安軸</span>
+      <span class="scale-tag">DERS 感情調節困難尺度</span>
+      <span class="scale-tag">Rosenberg SES</span>
+      <span class="scale-tag">Big Five 情緒安定性</span>
+      <span class="scale-tag">Social Desirability</span>
     </div>
-
-    <div class="badge-row">
-      <div class="badge-item"><div class="bi">🧠</div><div class="bl">心理学的根拠</div></div>
-      <div class="badge-item"><div class="bi">⏱️</div><div class="bl">直近3ヶ月軸</div></div>
-      <div class="badge-item"><div class="bi">🔄</div><div class="bl">逆転項目あり</div></div>
-      <div class="badge-item"><div class="bi">🤖</div><div class="bl">AI詳細分析</div></div>
-    </div>
-
-    <div class="scale-legend">
-      <div class="sl-title">回答形式（質問タイプで使い分けています）</div>
-      <div style="margin-bottom:12px">
-        <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">【行動頻度系】</div>
-        <div class="scale-grid">
-          <div class="scale-item"><div class="scale-num" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.28)">1</div>まったくしない</div>
-          <div class="scale-item"><div class="scale-num" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.28)">2</div>ほとんどしない</div>
-          <div class="scale-item"><div class="scale-num" style="background:rgba(242,104,138,0.15);color:var(--rose)">3</div>たまにする</div>
-          <div class="scale-item"><div class="scale-num" style="background:rgba(242,104,138,0.2);color:var(--rose)">4</div>よくする</div>
-          <div class="scale-item"><div class="scale-num" style="background:rgba(242,104,138,0.3);color:var(--rose)">5</div>ほぼ毎回する</div>
-        </div>
-      </div>
-      <div>
-        <div style="font-size:11px;color:var(--text-dim);margin-bottom:6px;">【内面・感情系】</div>
-        <div class="scale-grid">
-          <div class="scale-item"><div class="scale-num" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.28)">1</div>当てはまらない</div>
-          <div class="scale-item"><div class="scale-num" style="background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.28)">2</div>あまり当てはまらない</div>
-          <div class="scale-item"><div class="scale-num" style="background:rgba(242,104,138,0.15);color:var(--rose)">3</div>どちらとも言えない</div>
-          <div class="scale-item"><div class="scale-num" style="background:rgba(242,104,138,0.2);color:var(--rose)">4</div>やや当てはまる</div>
-          <div class="scale-item"><div class="scale-num" style="background:rgba(242,104,138,0.3);color:var(--rose)">5</div>非常に当てはまる</div>
-        </div>
+  </div>
+  <div class="scale-legend">
+    <h4>回答形式（質問タイプで使い分けています）</h4>
+    <div class="legend-section">
+      <div class="legend-label">【行動頻度系】</div>
+      <div class="legend-grid">
+        <div class="legend-item"><div class="legend-num" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.3)">1</div>まったくしない</div>
+        <div class="legend-item"><div class="legend-num" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.3)">2</div>ほとんどしない</div>
+        <div class="legend-item"><div class="legend-num" style="background:rgba(242,104,138,.15);color:var(--rose)">3</div>たまにする</div>
+        <div class="legend-item"><div class="legend-num" style="background:rgba(242,104,138,.2);color:var(--rose)">4</div>よくする</div>
+        <div class="legend-item"><div class="legend-num" style="background:rgba(242,104,138,.3);color:var(--rose)">5</div>ほぼ毎回する</div>
       </div>
     </div>
-
-    <button class="btn-primary" onclick="startQuiz()">診断を始める →</button>
-    <p style="font-size:11px;color:var(--text-faint);text-align:center;margin-top:14px;">
-      所要時間：約4〜6分 ／ 33問 ／ 個人情報は収集しません
-    </p>
-  </div>
-
-  <!-- ════ QUIZ ════ -->
-  <div id="quiz" class="section">
-    <div class="progress-wrap">
-      <div class="progress-top">
-        <span class="cat-badge" id="cat-label">A: 外向性・接触行動</span>
-        <span class="q-count" id="q-count">1 / 33</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
-      <div class="basis-label" id="basis-label">根拠: NEO-FFI 外向性</div>
-    </div>
-
-    <div class="q-card">
-      <p class="q-text" id="q-text">質問テキスト</p>
-    </div>
-
-    <div class="opts" id="opts"></div>
-
-    <button class="btn-primary" id="next-btn" onclick="nextQ()" disabled>次へ →</button>
-  </div>
-
-  <!-- ════ LOADING ════ -->
-  <div id="loading" class="section">
-    <div class="spinner"></div>
-    <p class="loading-text">AIが行動データを分析中...</p>
-    <p class="loading-sub">Big Five / ECR-R / IRI / DERS / Rosenberg SES</p>
-    <div class="score-preview" id="score-preview"></div>
-  </div>
-
-  <!-- ════ RESULT ════ -->
-  <div id="result" class="section">
-    <div class="rank-card" id="rank-card">
-      <div class="rank-glow" id="rank-glow"></div>
-      <div class="rank-label">TOTAL SCORE</div>
-      <div class="rank-score" id="rank-score">—</div>
-      <div class="rank-denom">/ 150点</div>
-      <div class="rank-type-badge" id="rank-type-badge">—</div>
-      <div class="rank-sub" id="rank-sub-type">—</div>
-      <div class="cat-bars" id="cat-bars"></div>
-    </div>
-
-    <div class="ai-report">
-      <div class="ai-report-title">✦ AI 詳細分析レポート</div>
-      <div class="ai-content" id="ai-content">分析中...</div>
-    </div>
-
-    <div class="scales-wrap">
-      <div class="scales-title">使用尺度</div>
-      <div class="scales-list">
-        <span class="scale-tag">NEO-FFI 外向性・協調性・誠実性・開放性</span>
-        <span class="scale-tag">IRI 共感尺度</span>
-        <span class="scale-tag">ECR-R 愛着不安軸</span>
-        <span class="scale-tag">DERS 感情調節困難尺度</span>
-        <span class="scale-tag">Rosenberg SES</span>
-        <span class="scale-tag">Big Five 情緒安定性</span>
-        <span class="scale-tag">Social Desirability</span>
+    <div class="legend-section">
+      <div class="legend-label">【内面・感情系】</div>
+      <div class="legend-grid">
+        <div class="legend-item"><div class="legend-num" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.3)">1</div>当てはまらない</div>
+        <div class="legend-item"><div class="legend-num" style="background:rgba(255,255,255,.06);color:rgba(255,255,255,.3)">2</div>あまり当てはまらない</div>
+        <div class="legend-item"><div class="legend-num" style="background:rgba(242,104,138,.15);color:var(--rose)">3</div>どちらとも言えない</div>
+        <div class="legend-item"><div class="legend-num" style="background:rgba(242,104,138,.2);color:var(--rose)">4</div>やや当てはまる</div>
+        <div class="legend-item"><div class="legend-num" style="background:rgba(242,104,138,.3);color:var(--rose)">5</div>非常に当てはまる</div>
       </div>
     </div>
-
-    <button class="btn-ghost" onclick="retryQuiz()">もう一度診断する</button>
   </div>
-
+  <button class="btn-start" onclick="startQuiz()">診断を始める →</button>
+  <p style="font-size:.72rem;color:var(--muted);text-align:center;margin-top:.9rem">所要時間：約4〜6分 ／ 33問 ／ 個人情報は収集しません</p>
 </div>
 
+<!-- QUIZ -->
+<div id="quizPage" style="display:none">
+  <div class="quiz-wrap">
+    <div class="progress-wrap">
+      <div class="progress-top">
+        <span class="cat-pill" id="catPill">A: 外向性</span>
+        <span class="q-num" id="qNum">1 / 33</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+      <div class="basis-note" id="basisNote">根拠: NEO-FFI 外向性</div>
+    </div>
+    <div class="q-card"><p class="q-text" id="qText"></p></div>
+    <div class="opts" id="opts"></div>
+    <button class="btn-next" id="btnNext" onclick="nextQ()" disabled>次へ →</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="spinner"></div>
+  <p class="loading-text">スコアを集計中...</p>
+  <div class="score-chips" id="scoreChips"></div>
+</div>
+
+<!-- RESULT -->
+<div id="resultPage" style="display:none"></div>
+
+</div>
 <script>
-// ─────────────────────────────────────────
-// 設問データ（改善版 33問・女性版）
-// ─────────────────────────────────────────
-const QUESTIONS = [
-  // ── A: 外向性・接触行動（NEO-FFI 外向性）行動頻度系 ──
-  {
-    id:1, cat:"A", catName:"A: 外向性・接触行動", basis:"NEO-FFI 外向性",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月で、初対面やまだ関係が浅い男性に自分から自然に話題を振った",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-  {
-    id:2, cat:"A", catName:"A: 外向性・接触行動", basis:"NEO-FFI 外向性",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月で、会話中に相手の話を広げる質問を自然に続けた",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-  {
-    id:3, cat:"A", catName:"A: 外向性・接触行動", basis:"NEO-FFI 外向性",
-    type:"inner", reverse:false,
-    text:"会話中や一緒にいるとき、自然な笑顔でいることが多い",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:4, cat:"A", catName:"A: 外向性・接触行動", basis:"NEO-FFI 外向性（逆転）",
-    type:"inner", reverse:true,
-    text:"会話中に沈黙が生まれると、強い不安や焦りを感じてしまう",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-
-  // ── B: 協調性・共感能力（Big Five協調性・IRI）──
-  {
-    id:5, cat:"B", catName:"B: 協調性・共感能力", basis:"IRI 視点取得",
-    type:"inner", reverse:false,
-    text:"相手の話を聞くとき、結論だけでなく感情の部分も理解しようとする",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:6, cat:"B", catName:"B: 協調性・共感能力", basis:"Big Five 協調性",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月で、相手に何かしてもらったとき、その場で具体的に感謝を言葉にした",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-  {
-    id:7, cat:"B", catName:"B: 協調性・共感能力", basis:"Big Five 協調性（逆転）",
-    type:"freq", reverse:true,
-    text:"直近3ヶ月で、会話中に相手の発言に対して「でも」「だって」と否定から入った",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-  {
-    id:8, cat:"B", catName:"B: 協調性・共感能力", basis:"Big Five 協調性（逆転）",
-    type:"freq", reverse:true,
-    text:"直近3ヶ月で、会話中に相手が話している途中で自分の意見や体験を差し込んだ",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-
-  // ── C: 情緒安定性（ECR-R不安軸・DERS 感情調節困難尺度）──
-  {
-    id:9, cat:"C", catName:"C: 情緒安定性", basis:"ECR-R 愛着不安軸（逆転）",
-    type:"inner", reverse:true,
-    text:"相手の返信が遅いと、理由を考える前に不安や不満が強くなる",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:10, cat:"C", catName:"C: 情緒安定性", basis:"DERS 感情調節困難（逆転）",
-    type:"inner", reverse:true,
-    text:"気分が悪いとき、そのまま態度や言葉に出てしまうことがある",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:11, cat:"C", catName:"C: 情緒安定性", basis:"ECR-R 愛着不安軸（逆転）",
-    type:"inner", reverse:true,
-    text:"相手の機嫌や態度に、自分の気分が大きく左右される",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:12, cat:"C", catName:"C: 情緒安定性", basis:"ECR-R 試し行動（逆転）",
-    type:"inner", reverse:true,
-    text:"関係が進むにつれて、不安から相手を試すような言動をしてしまうことがある",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:13, cat:"C", catName:"C: 情緒安定性", basis:"DERS 感情調節",
-    type:"inner", reverse:false,
-    text:"男性と一緒にいるとき、自分の機嫌は基本的に自分で保てている",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-
-  // ── D: 誠実性・一貫性（Big Five 誠実性）──
-  {
-    id:14, cat:"D", catName:"D: 誠実性・一貫性", basis:"Big Five 誠実性",
-    type:"inner", reverse:false,
-    text:"約束の時間やルールを守ることはほとんどブレない",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:15, cat:"D", catName:"D: 誠実性・一貫性", basis:"Big Five 誠実性",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月で、予定変更やトラブルが起きたとき、相手に不満をぶつけるより先に状況整理をした",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-  {
-    id:16, cat:"D", catName:"D: 誠実性・一貫性", basis:"Big Five 誠実性（逆転）",
-    type:"inner", reverse:true,
-    text:"自分のミスや至らなさを指摘されたとき、防御的になることが多い",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-
-  // ── E: 開放性・自己表現（Big Five開放性・Rosenberg SES）──
-  {
-    id:17, cat:"E", catName:"E: 開放性・自己表現", basis:"Big Five 開放性",
-    type:"inner", reverse:false,
-    text:"相手の価値観が自分と違っても、すぐ否定せず一度受け止められる",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:18, cat:"E", catName:"E: 開放性・自己表現", basis:"Rosenberg SES",
-    type:"inner", reverse:false,
-    text:"会話や関係の中で、自分の考えや気持ちを言語化して伝えられる",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:19, cat:"E", catName:"E: 開放性・自己表現", basis:"ECR-R 深読み行動（逆転）",
-    type:"inner", reverse:true,
-    text:"相手の言動に対して、裏の意図や本音を深読みしすぎることがある",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-
-  // ── F: 外見管理行動（行動指標・弁別力重視）──
-  {
-    id:20, cat:"F", catName:"F: 外見管理行動", basis:"外見管理行動指標",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月で、スキンケア・ヘアケア・眉など外見を整えるルーティンを週3回以上続けた",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-  {
-    id:21, cat:"F", catName:"F: 外見管理行動", basis:"外見管理行動指標",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月で、男性と会う前日または当日に、服装・髪・爪・香りなど全体的な外見を意識して整えた",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-  {
-    id:22, cat:"F", catName:"F: 外見管理行動", basis:"外見管理行動指標",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月で、体型維持・健康管理のために食事・運動・睡眠に意識的に取り組んだ",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-
-  // ── G: アウトカム指標（直近3ヶ月・実績ベース）──
-  {
-    id:23, cat:"G", catName:"G: アウトカム指標", basis:"アウトカム（再会意向）",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月以内に、男性から「また会いたい」と具体的に言われた",
-    opts:["0回","1回","2〜3回","4〜5回","6回以上"]
-  },
-  {
-    id:24, cat:"G", catName:"G: アウトカム指標", basis:"アウトカム（次回提案）",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月以内に、複数回会った男性から自然に次の予定を提案された",
-    opts:["0回","1回","2〜3回","4〜5回","6回以上"]
-  },
-  {
-    id:25, cat:"G", catName:"G: アウトカム指標", basis:"アウトカム（安心感評価）",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月以内に、男性から「一緒にいると楽だった」「話しやすい」と言われた",
-    opts:["0回","1回","2〜3回","4〜5回","6回以上"]
-  },
-  {
-    id:26, cat:"G", catName:"G: アウトカム指標", basis:"アウトカム（連絡継続）",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月以内に、デートや会話のあとLINEやメッセージが自然に続いた",
-    opts:["0回","1回","2〜3回","4〜5回","6回以上"]
-  },
-  {
-    id:27, cat:"G", catName:"G: アウトカム指標", basis:"アウトカム（再接触）",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月以内に、過去に関わった男性から時間が経ってから再度連絡が来た",
-    opts:["0回","1回","2〜3回","4〜5回","6回以上"]
-  },
-
-  // ── H: 自己評価バイアス補正（Social Desirability・DERS）──
-  {
-    id:28, cat:"H", catName:"H: 自己評価（バイアス補正）", basis:"Social Desirability",
-    type:"inner", reverse:false,
-    text:"自分はコミュニケーション能力が同世代の女性の平均より高いと思う",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:29, cat:"H", catName:"H: 自己評価（バイアス補正）", basis:"Social Desirability",
-    type:"inner", reverse:false,
-    text:"自分は同世代の女性の中ではモテる方だと思う",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-  {
-    id:30, cat:"H", catName:"H: 自己評価（バイアス補正）", basis:"DERS 感情調節",
-    type:"inner", reverse:false,
-    text:"デートや会話がうまくいかなかったとき、その日のうちに気持ちを整理して切り替えられる",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
-
-  // ── I: 補足指標（外見評価・自己開示・デート後行動）──
-  {
-    id:31, cat:"I", catName:"I: 補足指標", basis:"外見アウトカム指標",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月以内に、男性から「かわいい」「きれい」「雰囲気がいい」と外見を褒められた",
-    opts:["0回","1回","2〜3回","4〜5回","6回以上"]
-  },
-  {
-    id:32, cat:"I", catName:"I: 補足指標", basis:"自己開示行動指標",
-    type:"freq", reverse:false,
-    text:"直近3ヶ月で、デート後に自分からも「楽しかった」「また会いたい」と気持ちを伝えた",
-    opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]
-  },
-  {
-    id:33, cat:"I", catName:"I: 補足指標", basis:"嫉妬・不安行動（逆転）",
-    type:"inner", reverse:true,
-    text:"嫉妬や不安を感じたとき、そのまま相手にぶつけることがある",
-    opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]
-  },
+const QS = [
+  {id:1,cat:"A",catName:"A: 外向性・接触行動",basis:"NEO-FFI 外向性",type:"freq",rev:false,text:"直近3ヶ月で、初対面やまだ関係が浅い男性に自分から自然に話題を振った",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:2,cat:"A",catName:"A: 外向性・接触行動",basis:"NEO-FFI 外向性",type:"freq",rev:false,text:"直近3ヶ月で、会話中に相手の話を広げる質問を自然に続けた",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:3,cat:"A",catName:"A: 外向性・接触行動",basis:"NEO-FFI 外向性",type:"inner",rev:false,text:"会話中や一緒にいるとき、自然な笑顔でいることが多い",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:4,cat:"A",catName:"A: 外向性・接触行動",basis:"NEO-FFI 外向性（逆転）",type:"inner",rev:true,text:"会話中に沈黙が生まれると、強い不安や焦りを感じてしまう",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:5,cat:"B",catName:"B: 協調性・共感能力",basis:"IRI 視点取得",type:"inner",rev:false,text:"相手の話を聞くとき、結論だけでなく感情の部分も理解しようとする",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:6,cat:"B",catName:"B: 協調性・共感能力",basis:"Big Five 協調性",type:"freq",rev:false,text:"直近3ヶ月で、相手に何かしてもらったとき、その場で具体的に感謝を言葉にした",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:7,cat:"B",catName:"B: 協調性・共感能力",basis:"Big Five 協調性（逆転）",type:"freq",rev:true,text:"直近3ヶ月で、会話中に相手の発言に対して「でも」「だって」と否定から入った",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:8,cat:"B",catName:"B: 協調性・共感能力",basis:"Big Five 協調性（逆転）",type:"freq",rev:true,text:"直近3ヶ月で、会話中に相手が話している途中で自分の意見や体験を差し込んだ",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:9,cat:"C",catName:"C: 情緒安定性",basis:"ECR-R 愛着不安軸（逆転）",type:"inner",rev:true,text:"相手の返信が遅いと、理由を考える前に不安や不満が強くなる",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:10,cat:"C",catName:"C: 情緒安定性",basis:"DERS 感情調節困難（逆転）",type:"inner",rev:true,text:"気分が悪いとき、そのまま態度や言葉に出てしまうことがある",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:11,cat:"C",catName:"C: 情緒安定性",basis:"ECR-R 愛着不安軸（逆転）",type:"inner",rev:true,text:"相手の機嫌や態度に、自分の気分が大きく左右される",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:12,cat:"C",catName:"C: 情緒安定性",basis:"ECR-R 試し行動（逆転）",type:"inner",rev:true,text:"関係が進むにつれて、不安から相手を試すような言動をしてしまうことがある",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:13,cat:"C",catName:"C: 情緒安定性",basis:"DERS 感情調節",type:"inner",rev:false,text:"男性と一緒にいるとき、自分の機嫌は基本的に自分で保てている",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:14,cat:"D",catName:"D: 誠実性・一貫性",basis:"Big Five 誠実性",type:"inner",rev:false,text:"約束の時間やルールを守ることはほとんどブレない",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:15,cat:"D",catName:"D: 誠実性・一貫性",basis:"Big Five 誠実性",type:"freq",rev:false,text:"直近3ヶ月で、予定変更やトラブルが起きたとき、相手に不満をぶつけるより先に状況整理をした",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:16,cat:"D",catName:"D: 誠実性・一貫性",basis:"Big Five 誠実性（逆転）",type:"inner",rev:true,text:"自分のミスや至らなさを指摘されたとき、防御的になることが多い",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:17,cat:"E",catName:"E: 開放性・自己表現",basis:"Big Five 開放性",type:"inner",rev:false,text:"相手の価値観が自分と違っても、すぐ否定せず一度受け止められる",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:18,cat:"E",catName:"E: 開放性・自己表現",basis:"Rosenberg SES",type:"inner",rev:false,text:"会話や関係の中で、自分の考えや気持ちを言語化して伝えられる",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:19,cat:"E",catName:"E: 開放性・自己表現",basis:"ECR-R 深読み行動（逆転）",type:"inner",rev:true,text:"相手の言動に対して、裏の意図や本音を深読みしすぎることがある",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:20,cat:"F",catName:"F: 外見管理行動",basis:"外見管理行動指標",type:"freq",rev:false,text:"直近3ヶ月で、スキンケア・ヘアケア・眉など外見を整えるルーティンを週3回以上続けた",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:21,cat:"F",catName:"F: 外見管理行動",basis:"外見管理行動指標",type:"freq",rev:false,text:"直近3ヶ月で、男性と会う前日または当日に、服装・髪・爪・香りなど全体的な外見を意識して整えた",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:22,cat:"F",catName:"F: 外見管理行動",basis:"外見管理行動指標",type:"freq",rev:false,text:"直近3ヶ月で、体型維持・健康管理のために食事・運動・睡眠に意識的に取り組んだ",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:23,cat:"G",catName:"G: アウトカム指標",basis:"アウトカム（再会意向）",type:"freq",rev:false,text:"直近3ヶ月以内に、男性から「また会いたい」と具体的に言われた",opts:["0回","1回","2〜3回","4〜5回","6回以上"]},
+  {id:24,cat:"G",catName:"G: アウトカム指標",basis:"アウトカム（次回提案）",type:"freq",rev:false,text:"直近3ヶ月以内に、複数回会った男性から自然に次の予定を提案された",opts:["0回","1回","2〜3回","4〜5回","6回以上"]},
+  {id:25,cat:"G",catName:"G: アウトカム指標",basis:"アウトカム（安心感評価）",type:"freq",rev:false,text:"直近3ヶ月以内に、男性から「一緒にいると楽だった」「話しやすい」と言われた",opts:["0回","1回","2〜3回","4〜5回","6回以上"]},
+  {id:26,cat:"G",catName:"G: アウトカム指標",basis:"アウトカム（連絡継続）",type:"freq",rev:false,text:"直近3ヶ月以内に、デートや会話のあとLINEやメッセージが自然に続いた",opts:["0回","1回","2〜3回","4〜5回","6回以上"]},
+  {id:27,cat:"G",catName:"G: アウトカム指標",basis:"アウトカム（再接触）",type:"freq",rev:false,text:"直近3ヶ月以内に、過去に関わった男性から時間が経ってから再度連絡が来た",opts:["0回","1回","2〜3回","4〜5回","6回以上"]},
+  {id:28,cat:"H",catName:"H: 自己評価（バイアス補正）",basis:"Social Desirability",type:"inner",rev:false,text:"自分はコミュニケーション能力が同世代の女性の平均より高いと思う",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:29,cat:"H",catName:"H: 自己評価（バイアス補正）",basis:"Social Desirability",type:"inner",rev:false,text:"自分は同世代の女性の中ではモテる方だと思う",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:30,cat:"H",catName:"H: 自己評価（バイアス補正）",basis:"DERS 感情調節",type:"inner",rev:false,text:"デートや会話がうまくいかなかったとき、その日のうちに気持ちを整理して切り替えられる",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]},
+  {id:31,cat:"I",catName:"I: 補足指標",basis:"外見アウトカム指標",type:"freq",rev:false,text:"直近3ヶ月以内に、男性から「かわいい」「きれい」「雰囲気がいい」と外見を褒められた",opts:["0回","1回","2〜3回","4〜5回","6回以上"]},
+  {id:32,cat:"I",catName:"I: 補足指標",basis:"自己開示行動指標",type:"freq",rev:false,text:"直近3ヶ月で、デート後に自分からも「楽しかった」「また会いたい」と気持ちを伝えた",opts:["まったくしない","ほとんどしない","たまにする","よくする","ほぼ毎回する"]},
+  {id:33,cat:"I",catName:"I: 補足指標",basis:"嫉妬・不安行動（逆転）",type:"inner",rev:true,text:"嫉妬や不安を感じたとき、そのまま相手にぶつけることがある",opts:["当てはまらない","あまり当てはまらない","どちらとも言えない","やや当てはまる","非常に当てはまる"]}
 ];
 
-// カテゴリ定義
 const CAT_DEF = {
-  A: { name:"外向性・接触行動",   max:20, qs:[1,2,3,4] },
-  B: { name:"協調性・共感能力",   max:25, qs:[5,6,7,8] },
-  C: { name:"情緒安定性",         max:20, qs:[9,10,11,12,13] },
-  D: { name:"誠実性・一貫性",     max:15, qs:[14,15,16] },
-  E: { name:"開放性・自己表現",   max:10, qs:[17,18,19] },
-  F: { name:"外見管理行動",       max:20, qs:[20,21,22] },
-  G: { name:"アウトカム指標",     max:40, qs:[23,24,25,26,27] },
-  H: { name:"自己評価バイアス補正",max:null, qs:[28,29,30] },
-  I: { name:"補足指標",           max:null, qs:[31,32,33] },
+  A:{name:"外向性・接触行動",max:20,qs:[1,2,3,4]},
+  B:{name:"協調性・共感能力",max:25,qs:[5,6,7,8]},
+  C:{name:"情緒安定性",max:20,qs:[9,10,11,12,13]},
+  D:{name:"誠実性・一貫性",max:15,qs:[14,15,16]},
+  E:{name:"開放性・自己表現",max:10,qs:[17,18,19]},
+  F:{name:"外見管理行動",max:20,qs:[20,21,22]},
+  G:{name:"アウトカム指標",max:40,qs:[23,24,25,26,27]},
+  H:{name:"自己評価補正",max:null,qs:[28,29,30]},
+  I:{name:"補足指標",max:null,qs:[31,32,33]}
 };
 
-// ─── State ───
-let current = 0;
-let answers = {};
-let selectedVal = null;
+const RESULTS = {
+  S:{
+    color:"#F2688A",bg:"#130008",
+    typeName:"自然選択型",
+    oneLiner:"男性の反応・継続が自然に起きている状態",
+    desc:"回答から見えてきたのは、「男性からの反応が自然に起きていて、関係が自然な形で続いていく」という状況です。行動の量だけでなく、その質と結果が高い水準で揃っています。特に意識しなくても「また会いたい」と思われる状態が、行動パターンとして定着している可能性が高いです。",
+    strengths:[
+      "情緒安定性が高く、一緒にいると「楽」という感覚を相手に与えやすい状態です。ECR-R不安軸が低いことで、過剰な試し行動や不安の漏れが少なく、男性が安心して関係を続けやすい環境を作れています。",
+      "共感・傾聴のバランスが取れており、会話の中で相手が「理解されている」という感覚を持ちやすいです。IRI視点取得の高さが、自然な継続反応につながっています。",
+      "外見管理行動が習慣化されており、第一印象から継続的な評価まで安定しています。「会うたびに素敵だな」という印象の積み重ねが、長期的な関係継続を支えています。"
+    ],
+    bottleneck:[
+      "現状の課題があるとすれば「能動的な自己表現」です。選ばれる側として機能しているが、自分から関係を深める発信がやや受け身になっている可能性があります。相手からの反応を待つだけでなく、自分の気持ちや考えを先に言語化することで、関係の深さが変わります。",
+      "自己評価バイアスの点でも、スコアが高いときほど「うまくいっている理由」を過去の実績に帰属しやすくなります。環境が変わっても同じ結果を出すために、「なぜ選ばれているか」を意識的に言語化する習慣が次の課題です。"
+    ],
+    change:"現在の行動パターンを維持しながら、自己表現の「深さ」を一段上げることで、男性側の感情的な投資がさらに高まります。「この人ともっと深くつながりたい」という感覚を引き出せるようになります。",
+    actions:[
+      "デートの翌日、「昨日〇〇の話が印象に残りました」と具体的な内容を伝えるメッセージを送る",
+      "自分の価値観・好きなこと・大切にしていることを、会話の中で一つ具体的なエピソードで話す",
+      "うまくいった関係の「なぜうまくいったか」を一行だけメモする習慣をつける",
+      "普段は受け身になりがちな場面で、月1回自分から次の提案をしてみる"
+    ],
+    strategy:"現在の強みは「安心感＋共感」のバランスです。より深い関係を求めるなら、自己開示の深さを一段上げることが有効です。あなたの内面を知りたいと思わせることで、男性側の関係継続の動機が強まります。",
+    expert:"進化心理学・社会心理学の観点から言えば、あなたの現状は「関係継続コストが低い状態」にあります。情緒安定性と共感のバランスが取れていることで、男性が「一緒にいて楽」「また会いたい」という感覚を持ちやすくなっています。次のフェーズは「深さ」の追加です。",
+    first_action:"今週、デートや会話のあとに「〇〇の話が印象に残りました」と具体的な内容を伝えるメッセージを送ってみる",
+    redefine:"あなたが今いる状態は、多くの人が「もっとうまくやれれば」と思いながら辿り着けない場所です。\n\nただし、選ばれ続けることと、自分が望む相手と深くつながることは、別のスキルが必要です。今の状態は「選ばれる」ことへの準備が整っています。次は「どんな関係を自分から作りたいか」を意識することが、あなたの次の成長です。\n\nあなたはすでに正しい場所にいます。あとは、その場所から自分が望む方向に向かって、一歩踏み出すだけです。"
+  },
+  A:{
+    color:"#C9A7F5",bg:"#0e0818",
+    typeName:"安定好感型",
+    oneLiner:"反応は出始めているが、まだ安定していない",
+    desc:"回答から見えてきたのは、「男性からの反応はある程度起きているが、継続や次のステップへの発展が不安定」という状況です。行動は取れているが、その行動が男性の継続的な反応につながっていない部分があります。一つの改善で、関係の続きやすさが大きく変わる可能性があります。",
+    strengths:[
+      "外向性・接触行動の基本は機能しています。自分から話しかけたり、場の雰囲気に馴染む能力は一定レベルで備わっており、「話しかけやすい」という印象は作れています。",
+      "共感力の基礎はあります。相手の話を聞こうとする姿勢があり、「話を聞いてくれる人」という印象は与えられている可能性があります。"
+    ],
+    bottleneck:[
+      "最も影響が大きいのは「情緒安定性（C）」のズレです。ECR-R不安軸が高い場合、返信の遅さ・相手の機嫌・ちょっとした言動に感情が揺れやすく、それが表情・態度・メッセージに漏れ出ています。男性は「この人と一緒にいると気を遣う」と感じやすくなります。",
+      "D（誠実性）またはE（自己表現）が弱い場合、「この人はどんな人なのか」が伝わりにくい状態です。一緒にいて不快ではないが、「もっと知りたい」という理由が生まれない。自分の価値観・考え・感情を少しずつ言語化して伝えることで、男性側の関心が高まります。"
+    ],
+    change:"情緒安定性が一段上がると、男性からの連絡が途切れにくくなり、「次もまた会いたい」という感覚が定着しやすくなります。「一緒にいると楽」という評価が安定することで、関係が自然に継続するようになります。",
+    actions:[
+      "返信が遅くても「なぜ遅いか」を考える前に、3時間は気にしない練習をする",
+      "不安を感じたとき、相手に伝える前に「今、何が不安なのか」を一行だけノートに書く",
+      "デートのあとに「〇〇が楽しかった」と具体的な内容を一言添えてメッセージを送る",
+      "自分の価値観・好きなことを話すとき「〇〇に行ったんですけど」と固有名詞で話す習慣をつける"
+    ],
+    strategy:"安定した関係を求める穏やかなタイプの男性と相性が良い傾向があります。感情の起伏が少なく、じっくり関係を育てるタイプとの相性が特に良く、お互いの安心感が高まりやすいです。",
+    expert:"行動科学的に見ると、あなたは「接触→共感」のプロセスは機能していますが、「安定した感情の提示」が鍵になっています。恋愛関係において、男性が「また会いたい」と思うかどうかは、スペックより「一緒にいるときの感情コスト」に大きく左右されます。",
+    first_action:"今週、誰かとのやりとりで「不安を感じたとき、すぐ動かず3時間待つ」を一度実践してみる",
+    redefine:"あなたはすでに「好かれる素地」を持っています。問題は能力ではなく、「感情の揺れが外に出てしまうこと」です。\n\n感情が豊かなことは本来の強みです。ただ、それが「不安・試し行動・深読み」として相手に届いてしまうとき、せっかくの共感力が「気を遣う関係」に変わってしまいます。\n\n変えるのは感情そのものではありません。「感情をどのタイミングで・どう表現するか」のコントロールです。一つの習慣が変わるだけで、男性の反応は変わり始めます。"
+  },
+  B:{
+    color:"#F5C842",bg:"#130e00",
+    typeName:"ズレ修正型",
+    oneLiner:"能力はあるが、特定のズレが結果を妨げている",
+    desc:"回答から見えてきたのは、「特定のカテゴリは高いのに、一つの弱点が全体の結果を引き下げている」という状況です。全体的に低いのではなく、ある部分のズレが「ボトルネック」になっています。原因が特定されれば、改善の効果は大きく出やすい状態です。",
+    strengths:[
+      "何らかの強みカテゴリが存在しています。その強みが機能している場面では、男性の反応が引き出せている可能性があります。",
+      "行動量は一定程度確保されており、「機会がない」という問題より「質のズレ」が主な課題です。"
+    ],
+    bottleneck:[
+      "情緒安定性（C）が低い場合、「不安の漏れ」が関係の継続を妨げています。返信の遅さに敏感になる・機嫌が相手の態度に左右される・試し行動が出る——これらは男性に「この関係は気を遣う」という印象を与えやすいです。",
+      "外見管理行動（F）が低い場合、継続的な評価の積み上げが弱くなっています。第一印象だけでなく、会うたびに「素敵だな」という印象を与える継続的なケアが、長期的な選ばれやすさに直結します。"
+    ],
+    change:"ボトルネックが一つ改善されると、他の強みが活きるようになります。現在持っている共感力・誠実さ・外向性などの強みが、初めて十分に機能し始める転換点が来ます。",
+    actions:[
+      "今月中にスキンケア・ヘアケア・ネイルのいずれか一つを新たに習慣化する",
+      "男性に会う前日に「服装・髪・爪・香り」の4点を必ず確認する",
+      "不安を感じたとき、相手に伝える前に「これは本当に伝えるべきことか」を一度確認する",
+      "強みカテゴリを意識的に前に出す場面を増やす（得意な話題・場面に誘導する）"
+    ],
+    strategy:"弱点を補強しながら、強みを活かせる場面を意識的に選ぶことが有効です。例えばB（共感）が強ければ、2人でじっくり話せる場を選ぶ。A（外向性）が強ければ、グループの場から自然に距離を縮める機会を作るなど。",
+    expert:"心理学的に「最も弱いリンクが全体のパフォーマンスを決める」という構造は、恋愛においても同様です。あなたの場合、強みは存在しており、それを活かすための「最後のピース」が欠けている状態です。一点の改善が、全体を機能させます。",
+    first_action:"今週、外見に関することで「一つだけ」具体的な改善行動をとる（スキンケア開始・美容院予約など）",
+    redefine:"あなたが結果を出せていないのは、能力が低いからではありません。構造のズレです。\n\n自転車のタイヤが一つパンクしていたら、どれだけ漕いでも進みにくい。それと同じです。強みは存在している。使えていないのは、一つの欠如がブロックしているからです。\n\n何を直すべきかは、スコアを見れば明確です。大きな変革は必要ありません。一つのボトルネックを修正するだけで、今まで機能しなかった強みが動き始めます。あなたはすでに十分なものを持っています。あとは、一つだけ直せばいい。"
+  },
+  C:{
+    color:"#7ECFFF",bg:"#001520",
+    typeName:"土台構築型",
+    oneLiner:"継続的に選ばれる構造がまだ十分でない",
+    desc:"回答から見えてきたのは、「行動の量・質・結果のいずれも、まだ十分に機能していない」という状況です。これは能力の問題ではなく、「継続的に選ばれるための行動パターンがまだ組み上がっていない」という構造の問題です。基礎となる行動習慣を一つずつ積み上げることで、状況は変わります。",
+    strengths:[
+      "まだ「意識的に取り組んでいない」という可能性があります。スコアが低い理由が「やっていない」であれば、始めることで急速に変化する余地があります。",
+      "気づいた今がスタートラインです。多くの人は構造的な問題に気づかないまま同じパターンを繰り返します。原因が可視化されたことは、大きな前進です。"
+    ],
+    bottleneck:[
+      "最初に取り組むべきは「情緒安定性の基礎」です。不安が行動に出やすい状態では、どれだけ外向性や共感力を発揮しても「この人と一緒にいると疲れる」という印象になりやすいです。まず「不安をすぐ相手に向けない」という一点から始めましょう。",
+      "外見管理行動の習慣化も重要です。男性との関係において、継続的な「素敵だな」という印象の積み重ねは、長期的な関係継続に直接影響します。毎日のスキンケアから始めるだけで変わります。"
+    ],
+    change:"基礎行動が一つ習慣化するたびに、男性の反応が変わり始めます。最初の変化は小さいですが、複数の行動が積み上がった時点で、「また会いたい」と言われる頻度が変わる転換点が来ます。",
+    actions:[
+      "今日から毎晩、洗顔・保湿の2ステップのスキンケアを始める",
+      "男性と会う前には必ず「服装・髪・爪・香り」の4点を確認する習慣をつける",
+      "返信が遅くても3時間は気にしない、という小さなルールを自分に課す",
+      "デートのあとに「今日楽しかったです」の一言を必ず送る練習を始める",
+      "自分の気持ちや不安を、相手に伝える前にノートや携帯に一行書く習慣をつける"
+    ],
+    strategy:"最初のターゲットは「穏やかで安心感のある男性」「共通の趣味がある場所で会う男性」など、接触コストが低い環境を選ぶことが有効です。マッチングアプリよりも、習い事・趣味の集まりなどリアルの場での接触から始めることをお勧めします。",
+    expert:"行動科学的に言えば、変化は「行動の積み重ね」から始まります。最初から完璧を目指さず、今週一つだけ変える。来週また一つ変える。この積み上げが3ヶ月後に大きな差になります。感情コントロールも、外見管理も、習慣によって変化するものです。",
+    first_action:"今日の夜、洗顔と保湿だけのシンプルなスキンケアを始める。これが最初の一歩です",
+    redefine:"あなたは「モテない人間」ではなく、「まだ始まっていない人」です。\n\n多くの人が「自分はモテない」と思い込んでいますが、実際は「選ばれる行動をまだ習慣にしていない」というだけのことがほとんどです。才能や容姿がすべてを決めるなら、行動を変えた人が変わるはずがない。でも実際には変わっています。\n\n今のスコアは現時点の行動の記録です。過去でも、未来でもありません。今日一つ変えれば、来月のスコアは変わります。あなたに必要なのは、大きな変革ではありません。今日、一つだけ動くことです。"
+  }
+};
 
-// ─── スコア計算 ───
-function calcScores(ans) {
-  const raw = {};
-  QUESTIONS.forEach(q => {
-    const v = ans[q.id] ?? 3;
-    raw[q.id] = q.reverse ? (6 - v) : v;
+let cur=0,ans={},selVal=null;
+
+function calcScores(a){
+  const raw={};
+  QS.forEach(q=>{const v=a[q.id]||3;raw[q.id]=q.rev?(6-v):v;});
+  const cs={};
+  Object.entries(CAT_DEF).forEach(([cat,def])=>{
+    const vals=def.qs.map(id=>raw[id]||3);
+    const avg=vals.reduce((x,y)=>x+y,0)/vals.length;
+    cs[cat]=def.max?Math.round((avg/5)*def.max):Math.round((avg/5)*100);
   });
+  const total=cs.A+cs.B+cs.C+cs.D+cs.E+cs.F+Math.round(cs.G*1.5);
+  return{cs,total};
+}
 
-  const catScores = {};
-  Object.entries(CAT_DEF).forEach(([cat, def]) => {
-    const vals = def.qs.map(id => raw[id] ?? 3);
-    const avg = vals.reduce((a,b)=>a+b,0) / vals.length;
-    catScores[cat] = def.max
-      ? Math.round((avg/5)*def.max)
-      : Math.round((avg/5)*100);
+function getKey(t){if(t>=120)return'S';if(t>=90)return'A';if(t>=60)return'B';return'C';}
+function show(id){document.getElementById(id).style.display='block';}
+function hide(id){document.getElementById(id).style.display='none';}
+
+function startQuiz(){cur=0;ans={};selVal=null;hide('topPage');show('quizPage');renderQ();}
+
+function renderQ(){
+  const q=QS[cur];
+  document.getElementById('catPill').textContent=q.catName;
+  document.getElementById('qNum').textContent=`${cur+1} / ${QS.length}`;
+  document.getElementById('basisNote').textContent=`根拠: ${q.basis}`;
+  document.getElementById('progressFill').style.width=`${Math.round((cur/QS.length)*100)}%`;
+  document.getElementById('qText').textContent=`Q${q.id}. ${q.text}`;
+  const optsEl=document.getElementById('opts');
+  optsEl.innerHTML='';
+  q.opts.forEach((label,i)=>{
+    const v=i+1;
+    const btn=document.createElement('button');
+    btn.className='opt-btn'+(selVal===v?' selected':'');
+    btn.innerHTML=`<span class="opt-num">${v}</span>${label}`;
+    btn.onclick=()=>selectOpt(v);
+    optsEl.appendChild(btn);
   });
-
-  const total = catScores.A + catScores.B + catScores.C +
-                catScores.D + catScores.E + catScores.F +
-                Math.round(catScores.G * 1.5);
-
-  return { catScores, total, raw };
+  const nb=document.getElementById('btnNext');
+  nb.disabled=selVal===null;
+  nb.textContent=cur+1===QS.length?'診断する ✨':'次へ →';
 }
 
-// ─── 画面切替 ───
-function showSection(id) {
-  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById(id);
-  el.classList.add('active');
-  el.classList.remove('anim-fadeup','anim-bloom');
-  void el.offsetWidth;
-  el.classList.add('anim-fadeup');
-  window.scrollTo({ top:0, behavior:'smooth' });
-}
-
-// ─── 設問描画 ───
-function renderQuestion() {
-  const q = QUESTIONS[current];
-  document.getElementById('cat-label').textContent = q.catName;
-  document.getElementById('q-count').textContent = `${current+1} / ${QUESTIONS.length}`;
-  document.getElementById('basis-label').textContent = `根拠: ${q.basis}`;
-  document.getElementById('q-text').textContent = `Q${q.id}. ${q.text}`;
-
-  const pct = Math.round((current/QUESTIONS.length)*100);
-  document.getElementById('progress-fill').style.width = pct + '%';
-
-  const opts = document.getElementById('opts');
-  opts.innerHTML = '';
-  q.opts.forEach((label, i) => {
-    const val = i + 1;
-    const btn = document.createElement('button');
-    btn.className = 'opt-btn' + (selectedVal === val ? ' selected' : '');
-    btn.innerHTML = `<span class="opt-num">${val}</span>${label}`;
-    btn.onclick = () => selectOpt(val);
-    opts.appendChild(btn);
+function selectOpt(v){
+  selVal=v;
+  document.querySelectorAll('.opt-btn').forEach((b,i)=>{
+    const sel=i+1===v;
+    b.classList.toggle('selected',sel);
+    const n=b.querySelector('.opt-num');
+    n.style.background=sel?'linear-gradient(135deg,var(--rose),var(--lav))':'rgba(255,255,255,.06)';
+    n.style.color=sel?'#fff':'var(--muted)';
   });
-
-  const nextBtn = document.getElementById('next-btn');
-  nextBtn.disabled = selectedVal === null;
-  nextBtn.textContent = current+1 === QUESTIONS.length ? '診断する ✨' : '次へ →';
+  document.getElementById('btnNext').disabled=false;
 }
 
-function selectOpt(val) {
-  selectedVal = val;
-  document.querySelectorAll('.opt-btn').forEach((btn, i) => {
-    const isSelected = i+1 === val;
-    btn.classList.toggle('selected', isSelected);
-    const num = btn.querySelector('.opt-num');
-    num.style.background = isSelected ? 'linear-gradient(135deg,#F2688A,#C9A7F5)' : 'rgba(255,255,255,0.06)';
-    num.style.color = isSelected ? '#fff' : 'rgba(255,255,255,0.38)';
-  });
-  document.getElementById('next-btn').disabled = false;
-}
-
-function startQuiz() {
-  current = 0; answers = {}; selectedVal = null;
-  showSection('quiz');
-  renderQuestion();
-}
-
-function nextQ() {
-  if (selectedVal === null) return;
-  answers[QUESTIONS[current].id] = selectedVal;
-  selectedVal = null;
-  if (current + 1 < QUESTIONS.length) {
-    current++;
-    renderQuestion();
-  } else {
-    const scores = calcScores(answers);
-    showLoading(scores);
-    fetchAI(scores);
+function nextQ(){
+  if(selVal===null)return;
+  ans[QS[cur].id]=selVal;
+  selVal=null;
+  if(cur+1<QS.length){cur++;renderQ();}
+  else{
+    const sc=calcScores(ans);
+    showLoading(sc);
+    setTimeout(()=>showResult(sc),1800);
   }
 }
 
-// ─── ローディング ───
-function showLoading(scores) {
-  showSection('loading');
-  const preview = document.getElementById('score-preview');
-  preview.innerHTML = '';
-  ['A','B','C','D','E','F','G'].forEach(cat => {
-    const def = CAT_DEF[cat];
-    const chip = document.createElement('div');
-    chip.className = 'score-chip';
-    chip.innerHTML = `<div class="sc-cat">${cat}</div><div class="sc-val">${scores.catScores[cat]}<span class="sc-max">/${def.max}</span></div>`;
-    preview.appendChild(chip);
+function showLoading(sc){
+  hide('quizPage');show('loadingScreen');
+  const el=document.getElementById('scoreChips');
+  el.innerHTML='';
+  ['A','B','C','D','E','F','G'].forEach(cat=>{
+    const def=CAT_DEF[cat];
+    el.innerHTML+=`<div class="chip"><div class="chip-cat">${cat}</div><div class="chip-val">${sc.cs[cat]}<span class="chip-max">/${def.max}</span></div></div>`;
   });
 }
 
-// ─── システムプロンプト ───
-const SYSTEM_PROMPT = `あなたは社会心理学・進化心理学・行動科学・対人心理学の専門家であり、
-女性の恋愛市場における魅力（Mate Value）を行動データと結果データの両面から
-定量評価・改善提案できるアナリストです。
-
-【絶対ルール】
-・不確かな内容は「推測」と明記する
-・仮定・事実・推測を混同しない
-・自己評価バイアスが存在する前提で分析する
-・抽象論ではなく「状況×行動」で説明する
-・否定ではなく改善の可能性として表現する
-・スピリチュアル・占い・根拠のないラベリング禁止
-・「モテる/モテない」を人間的優劣として扱わない
-・行動意欲が湧く具体性を最優先にする
-・全体的に具体的で分かりやすく、優しいトーンで出力する
-
-【基本定義】
-この診断における「モテ」とは「多数からチヤホヤされること」ではなく、
-「気になる人にちゃんと意識してもらい、継続的に選ばれること」を指す。
-短期的な注目ではなく「成熟した男性に継続的に選ばれるか」を重視する。
-
-【評価カテゴリ・配点（使用尺度）】
-A: 外向性・接触行動（NEO-FFI外向性） 最大20点
-B: 協調性・共感能力（Big Five協調性・IRI） 最大25点
-C: 情緒安定性（ECR-R愛着不安軸・DERS感情調節） 最大20点
-D: 誠実性・一貫性（Big Five誠実性） 最大15点
-E: 開放性・自己表現（Big Five開放性・Rosenberg SES） 最大10点
-F: 外見管理行動（行動管理指標） 最大20点
-G: アウトカム指標（直近3ヶ月の実績） ×1.5倍 最大60点
-H: 自己評価バイアス補正（Social Desirability・DERS） 参考のみ
-I: 補足指標（外見評価・デート後行動・嫉妬行動） 総評に反映
-
-合計スコア = A+B+C+D+E+F+(G×1.5)
-
-【タイプ分類】
-120点以上：自然選択型（男性の反応・継続が自然に起きている状態）
-90〜119点：安定好感型（反応は出始めているが、まだ安定していない）
-60〜89点 ：ズレ修正型（能力はあるが特定のズレが結果を妨げている）
-59点以下 ：土台構築型（継続的に選ばれる構造がまだ十分でない）
-
-【サブタイプ判定】
-A〜F高・G低 → 印象空回りタイプ（行動はあるが男性の反応につながっていない）
-C低        → 不安漏れタイプ（感情コントロールが関係の継続を妨げている）
-B高・C低   → 優しいが重いタイプ（共感力はあるが不安が出てしまう）
-E低        → 自己表現薄いタイプ（何を考えているのかが相手に伝わりにくい）
-G高・A低   → 受け身好かれタイプ（反応はあるが自分から動かないため機会損失）
-
-【出力構造（必ずこの順番・全項目省略なし）】
-## ① 総合スコアと評価
-カテゴリ別スコア・タイプ・サブタイプ・一行総評を含む
-
-## ② 現状の言語化
-実際に起きていそうな恋愛シーンを具体的に描写する（数字の羅列にしない）
-
-## ③ 行動と結果の乖離分析
-行動量×結果量の組み合わせ、バイアス補正（H）を参照した考察
-
-## ④ 強み（1〜3項目）
-心理学的根拠（互恵性・ミラーリング・安心感・予測可能性など）を添えて説明
-
-## ⑤ ボトルネック（1〜2項目に絞る）
-最も結果に影響している欠如・ズレを特定する
-
-## ⑥ 改善したらどう変わるか
-男性の具体的な行動変化（返信・再会・次回提案・好意表明など）を描写する
-
-## ⑦ 行動レベルの改善策（3〜5項目）
-「状況＋行動」形式、今週からできること、動機づけ的説明禁止
-
-## ⑧ 恋愛戦略
-相性の良い男性のタイプと心理学的な理由
-
-## ⑨ 専門家コメント
-社会心理学・進化心理学・行動科学の視点からの総括
-
-## ⑩ 締め
-「これをやれば変われる」という手応えで締める
-
-【文体・トーン】
-・優しいが現実的、曖昧すぎず断定的すぎない
-・各項目300文字程度、日本語のみ
-・読んだあと行動したくなる文章
-・専門的だが難解でない`;
-
-async function fetchAI(scores) {
-  const qaSummary = QUESTIONS.map(q => {
-    const raw = answers[q.id] ?? 3;
-    const processed = q.reverse ? (6-raw) : raw;
-    const label = q.opts[raw-1] ?? raw;
-    return `Q${q.id}[${q.cat}・${q.basis}・${q.type}系${q.reverse?'・逆転':''}] ${q.text}\n  → 回答:${raw}「${label}」/ 処理済スコア:${processed}`;
-  }).join('\n');
-
-  const catDetail = Object.entries(CAT_DEF)
-    .map(([cat,def]) => `${cat}(${def.name}): ${scores.catScores[cat]}${def.max?`/${def.max}点`:'点(参考)'}`)
-    .join(' | ');
-
-  const userMsg = `【診断スコアデータ】
-合計スコア: ${scores.total}点（最大150点）
-カテゴリ別スコア: ${catDetail}
-
-【全回答詳細（直近3ヶ月ベース・逆転処理済）】
-${qaSummary}
-
-上記データをもとに出力構造①〜⑩を全て省略なく日本語で出力してください。`;
-
-  try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({
-        model:'claude-sonnet-4-20250514',
-        max_tokens:3500,
-        system: SYSTEM_PROMPT,
-        messages:[{ role:'user', content:userMsg }]
-      })
-    });
-    const data = await res.json();
-    const text = data.content?.map(b=>b.text||'').join('') || '分析結果を取得できませんでした。';
-    showResult(scores, text);
-  } catch(e) {
-    showResult(scores, '通信エラーが発生しました。もう一度お試しください。');
-  }
-}
-
-// ─── 結果描画 ───
-function showResult(scores, aiText) {
-  const total = scores.total;
-  let color, bg, typeName, subDesc;
-
-  if (total >= 120) {
-    color='#F2688A'; bg='#130008';
-    typeName='自然選択型'; subDesc='男性の反応・継続が自然に起きている状態';
-  } else if (total >= 90) {
-    color='#C9A7F5'; bg='#0e0818';
-    typeName='安定好感型'; subDesc='反応は出始めているが、まだ安定していない';
-  } else if (total >= 60) {
-    color='#F5C842'; bg='#130e00';
-    typeName='ズレ修正型'; subDesc='能力はあるが特定のズレが結果を妨げている';
-  } else {
-    color='#7ECFFF'; bg='#001520';
-    typeName='土台構築型'; subDesc='継続的に選ばれる構造がまだ十分でない';
-  }
-
-  const card = document.getElementById('rank-card');
-  card.style.background = bg;
-  card.style.border = `1px solid ${color}22`;
-  document.getElementById('rank-glow').style.background = `radial-gradient(circle, ${color}15, transparent 70%)`;
-  document.getElementById('rank-score').textContent = total;
-  document.getElementById('rank-score').style.color = color;
-  document.getElementById('rank-score').style.textShadow = `0 0 48px ${color}55`;
-  const badge = document.getElementById('rank-type-badge');
-  badge.textContent = typeName;
-  badge.style.background = `${color}18`;
-  badge.style.color = color;
-  badge.style.border = `1px solid ${color}38`;
-  document.getElementById('rank-sub-type').textContent = subDesc;
-
-  const bars = document.getElementById('cat-bars');
-  bars.innerHTML = '';
-  ['A','B','C','D','E','F','G'].forEach(cat => {
-    const def = CAT_DEF[cat];
-    const sc = scores.catScores[cat];
-    const pct = Math.round((sc/def.max)*100);
-    bars.innerHTML += `
-      <div class="cat-bar-row">
-        <div class="cat-bar-top">
-          <span class="cat-bar-name">${cat}: ${def.name}</span>
-          <span class="cat-bar-val" style="color:${color}">${sc}/${def.max}</span>
-        </div>
-        <div class="cat-bar-bg">
-          <div class="cat-bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${color}88,${color})"></div>
-        </div>
-      </div>`;
+function showResult(sc){
+  hide('loadingScreen');
+  const key=getKey(sc.total);
+  const d=RESULTS[key];
+  const c=d.color,bg=d.bg;
+  let barsHtml='';
+  ['A','B','C','D','E','F','G'].forEach(cat=>{
+    const def=CAT_DEF[cat];
+    const val=sc.cs[cat];
+    const pct=Math.round((val/def.max)*100);
+    barsHtml+=`<div class="bar-row"><div class="bar-top"><span class="bar-name">${cat}: ${def.name}</span><span class="bar-val" style="color:${c}">${val}/${def.max}</span></div><div class="bar-bg"><div class="bar-fill" style="width:${pct}%;background:linear-gradient(90deg,${c}88,${c})"></div></div></div>`;
   });
+  const sec=(num,title,content)=>`<div class="result-section"><div class="section-label"><span class="section-num">${String(num).padStart(2,'0')}</span>${title}</div>${content}</div>`;
+  const listHtml=(arr,cls='')=>arr.map(s=>`<li class="rl-item ${cls}">${s}</li>`).join('');
 
-  document.getElementById('ai-content').innerHTML = convertMarkdown(aiText, color);
-  showSection('result');
+  let html=`<div class="result-wrap fade-in">
+    <div class="rank-card" style="background:${bg};border:.5px solid ${c}22">
+      <div class="rank-glow" style="background:radial-gradient(circle,${c}15,transparent 70%)"></div>
+      <div class="rank-label">TOTAL SCORE</div>
+      <div class="rank-score" style="color:${c};text-shadow:0 0 48px ${c}55">${sc.total}</div>
+      <div class="rank-denom">/ 150点</div>
+      <div class="rank-badge" style="background:${c}18;color:${c};border:.5px solid ${c}40">${d.typeName}</div>
+      <div class="rank-sub">${d.oneLiner}</div>
+      <div class="cat-bars">${barsHtml}</div>
+    </div>
+    ${sec(1,"この診断でわかること",`<div class="section-text">この診断はBig Five・IRI・ECR-R・DERS・Rosenberg SESなど心理学的尺度をもとに、あなたの恋愛市場における行動パターンと結果の「ズレ」を定量化しています。スコアは現時点の行動の記録であり、過去でも未来でもありません。</div>`)}
+    ${sec(2,"現状の言語化",`<div class="section-text">${d.desc}</div>`)}
+    ${sec(3,"あなたの強み",`<ul class="result-list">${listHtml(d.strengths,'rl-ok')}</ul>`)}
+    ${sec(4,"ボトルネックと改善ポイント",`<ul class="result-list">${listHtml(d.bottleneck,'rl-warn')}</ul>`)}
+    ${sec(5,"改善したらどう変わるか",`<div class="section-text">${d.change}</div>`)}
+    ${sec(6,"行動レベルの改善策",`<div style="display:flex;flex-direction:column;gap:.5rem">${d.actions.map((a,i)=>`<div class="action-box"><div class="action-label">ACTION ${i+1}</div><div class="action-text">${a}</div></div>`).join('')}</div>`)}
+    ${sec(7,"今日からできる最初の1アクション",`<div class="first-action"><div class="first-action-label">今すぐできること</div><div class="first-action-text">${d.first_action}</div></div>`)}
+    ${sec(8,"恋愛戦略・相性の良い男性のタイプ",`<div class="section-text">${d.strategy}</div>`)}
+    ${sec(9,"専門家コメント",`<div class="highlight-box">${d.expert}</div>`)}
+    ${sec(10,"締め",`<div class="redefine-box">${d.redefine}</div>`)}
+    <div class="scales-footer">
+      <div class="scales-footer-title">使用尺度</div>
+      <div class="scales-footer-tags">
+        <span class="sf-tag">NEO-FFI 外向性・協調性・誠実性・開放性</span>
+        <span class="sf-tag">IRI 共感尺度</span><span class="sf-tag">ECR-R 愛着不安軸</span>
+        <span class="sf-tag">DERS 感情調節困難尺度</span><span class="sf-tag">Rosenberg SES</span>
+        <span class="sf-tag">Big Five 情緒安定性</span><span class="sf-tag">Social Desirability</span>
+      </div>
+    </div>
+    <button class="btn-retry" onclick="retryQuiz()">もう一度診断する</button>
+  </div>`;
+
+  document.getElementById('resultPage').innerHTML=html;
+  show('resultPage');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
-function convertMarkdown(text, color) {
-  let html = text
-    .replace(/^## (.+)$/gm, `<h2 style="color:${color}">$1</h2>`)
-    .replace(/^### (.+)$/gm, `<h3 style="color:${color}cc">$1</h3>`)
-    .replace(/\*\*(.+?)\*\*/g, `<strong style="color:${color}">$1</strong>`)
-    .replace(/^[-・] (.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>\n?)+/gs, m => `<ul>${m}</ul>`)
-    .replace(/\n\n/g, '</p><p style="margin:8px 0;">')
-    .replace(/\n/g, '<br>');
-  return `<p style="margin:0">${html}</p>`;
-}
-
-function retryQuiz() {
-  current = 0; answers = {}; selectedVal = null;
-  showSection('intro');
+function retryQuiz(){
+  cur=0;ans={};selVal=null;
+  hide('resultPage');show('topPage');
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 </script>
 </body>
